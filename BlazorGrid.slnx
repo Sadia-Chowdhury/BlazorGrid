@@ -2,5 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path="README.md" />
   </Folder>
+  <Project Path="BlazorGrid.Components/BlazorGrid.Components.csproj" Id="fb349866-5531-4139-a9de-5c147cebe79d" />
   <Project Path="BlazorGrid.Core/BlazorGrid.Core.csproj" />
+  <Project Path="BlazorGrid.Demo/BlazorGrid.Demo.csproj" Id="8864cf5c-d1df-454f-b46c-d8f2b36b4685" />
 </Solution>

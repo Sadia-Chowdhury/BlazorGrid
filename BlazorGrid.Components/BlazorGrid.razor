@@ -1,0 +1,48 @@
+﻿@using BlazorGrid.Core
+@typeparam T
+<table>
+    <thead>
+        <tr>
+            @foreach (var column in _columns)
+            {
+                <th>@column.DisplayName</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Items)
+        {
+            <tr>
+                @foreach (var column in _columns)
+                {
+                    <td>@GetValue(item, column.PropertyName)</td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public List<T> Items { get; set; } = new();
+    private List<ColumnDefinition> _columns = new();
+
+    protected override void OnParametersSet()
+    {
+        if (Items != null && Items.Any())
+        {
+            var itemType = Items.First().GetType();
+            var resolver = new ColumnResolver();
+            _columns = resolver.ResolveByType(itemType);
+        }
+    }
+
+    private string GetValue(T item, string propertyName)
+    {
+        var value = typeof(T)
+            .GetProperty(propertyName)
+            ?.GetValue(item);
+
+        return value?.ToString() ?? "";
+    }
+}

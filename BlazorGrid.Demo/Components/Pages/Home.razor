@@ -1,0 +1,16 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using BlazorGrid.Demo.ViewModels
+
+<BlazorGrid Items="@employees" T="EmployeeViewModel" />
+@code {
+    private List<EmployeeViewModel> employees = new()
+    {
+        new() { Name = "Sadia Chowdhury",  Department = "Technology", Email = "sadia@example.com",  InternalCode = "EMP001" },
+        new() { Name = "Rahel Ahmed",      Department = "Finance",    Email = "rahel@example.com",  InternalCode = "EMP002" },
+        new() { Name = "Fatema Begum",     Department = "HR",         Email = "fatema@example.com", InternalCode = "EMP003" },
+        new() { Name = "Karim Hassan",     Department = "Technology", Email = "karim@example.com",  InternalCode = "EMP004" },
+    };
+
+    
+}
