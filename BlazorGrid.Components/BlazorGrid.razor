@@ -1,11 +1,26 @@
 ﻿@using BlazorGrid.Core
 @typeparam T
+<div>
+    @foreach (var column in _columns)
+    {
+        <label>
+            <input type="checkbox"
+                   checked="@column.IsVisible"
+                   @onchange="() => ToggleColumn(column)" />
+            @column.DisplayName
+        </label>
+        <span> | </span>
+    }
+</div>
 <table>
     <thead>
         <tr>
             @foreach (var column in _columns)
             {
-                <th>@column.DisplayName</th>
+                if (column.IsVisible)
+                {
+                    <th>@column.DisplayName</th>
+                }
             }
         </tr>
     </thead>
@@ -15,7 +30,10 @@
             <tr>
                 @foreach (var column in _columns)
                 {
-                    <td>@GetValue(item, column.PropertyName)</td>
+                    if (column.IsVisible)
+                    {
+                        <td>@GetValue(item, column.PropertyName)</td>
+                    }
                 }
             </tr>
         }
@@ -45,4 +63,9 @@
 
         return value?.ToString() ?? "";
     }
+    private void ToggleColumn(ColumnDefinition column)
+    {
+        column.IsVisible = !column.IsVisible;
+    }
+
 }
