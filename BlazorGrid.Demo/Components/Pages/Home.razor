@@ -2,8 +2,17 @@
 @rendermode InteractiveServer
 @using BlazorGrid.Demo.ViewModels
 
-<BlazorGrid Items="@employees" T="EmployeeViewModel" />
+<h1>BlazorGrid Demo</h1>
+
+<BlazorGrid.Components.BlazorGrid Items="@employees"
+                                  T="EmployeeViewModel"
+                                  OnSortChanged="HandleSort" />
+
+<p>Sort: @_sortInfo</p>
+
 @code {
+    private string _sortInfo = "No sort applied";
+
     private List<EmployeeViewModel> employees = new()
     {
         new() { Name = "Sadia Chowdhury",  Department = "Technology", Email = "sadia@example.com",  InternalCode = "EMP001" },
@@ -12,5 +21,8 @@
         new() { Name = "Karim Hassan",     Department = "Technology", Email = "karim@example.com",  InternalCode = "EMP004" },
     };
 
-    
+    private void HandleSort(SortState sort)
+    {
+        _sortInfo = $"Sorting by {sort.ColumnName} - {sort.Direction}";
+    }
 }

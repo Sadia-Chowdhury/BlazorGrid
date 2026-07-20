@@ -19,7 +19,14 @@
             {
                 if (column.IsVisible)
                 {
-                    <th>@column.DisplayName</th>
+                    <th @onclick="() => HandleSort(column)"
+                        style="cursor:pointer;">
+                        @column.DisplayName
+                        @if (_sortState.ColumnName == column.PropertyName)
+                        {
+                            @(_sortState.Direction == SortDirection.Ascending ? " ▲" : " ▼")
+                        }
+                    </th>
                 }
             }
         </tr>
@@ -41,6 +48,9 @@
 </table>
 
 @code {
+    [Parameter]
+    public EventCallback<SortState> OnSortChanged { get; set; }
+    private SortState _sortState = new();
     [Parameter]
     public List<T> Items { get; set; } = new();
     private List<ColumnDefinition> _columns = new();
@@ -67,5 +77,25 @@
     {
         column.IsVisible = !column.IsVisible;
     }
+    private async Task HandleSort(ColumnDefinition column)
+    {
+        if (!column.IsSortable)
+            return;
 
+        if (_sortState.ColumnName == column.PropertyName)
+        {
+            // same column clicked — flip direction
+            _sortState.Direction = _sortState.Direction == SortDirection.Ascending
+                ? SortDirection.Descending
+                : SortDirection.Ascending;
+        }
+        else
+        {
+            // new column clicked — reset to ascending
+            _sortState.ColumnName = column.PropertyName;
+            _sortState.Direction = SortDirection.Ascending;
+        }
+
+        await OnSortChanged.InvokeAsync(_sortState);
+    }
 }
