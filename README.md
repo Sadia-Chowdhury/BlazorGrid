@@ -1,6 +1,6 @@
 # BlazorGrid
 
-A reflection and attribute-driven column definition framework for Blazor Server.
+A reflection and attribute-driven data grid library for Blazor Server.
 
 ## What is it?
 BlazorGrid lets you define table columns directly on your C# model using attributes.
@@ -15,10 +15,10 @@ public class EmployeeViewModel
     [GridColumn(Label = "Full Name", IsSortable = true, Order = 1)]
     public string Name { get; set; }
 
-    [GridColumn(Label = "Department", IsFilterable = true, Order = 2)]
+    [GridColumn(Label = "Department", IsSortable = true, IsFilterable = true, Order = 2)]
     public string Department { get; set; }
 
-    [GridColumn(Label = "Email", Order = 3)]
+    [GridColumn(Label = "Email", IsSortable = true, Order = 3)]
     public string Email { get; set; }
 
     public string InternalCode { get; set; } // no attribute — ignored automatically
@@ -28,13 +28,29 @@ public class EmployeeViewModel
 Then use the component:
 
 ```razor
-<BlazorGrid Items="@employees" T="EmployeeViewModel" />
+<BlazorGrid Items="@employees" 
+            T="EmployeeViewModel"
+            OnSortChanged="HandleSort" />
 ```
 
-That's it. BlazorGrid reads your model and renders the table automatically.
+Handle sorting in your page:
+
+```csharp
+private void HandleSort(SortState sort)
+{
+    // sort.ColumnName = "Name"
+    // sort.Direction = Ascending or Descending
+    // pass to your stored procedure, EF Core, or Dapper
+}
+```
+
+## Features
+- ✅ Attribute-driven column resolution
+- ✅ Column visibility toggle
+- ✅ Sort state management with direction indicator
 
 ## Project Structure
-- `BlazorGrid.Core` — attributes, column definitions, resolver engine
+- `BlazorGrid.Core` — attributes, column definitions, resolver, sort state
 - `BlazorGrid.Components` — Razor components
 - `BlazorGrid.Demo` — working Blazor Server demo app
 
