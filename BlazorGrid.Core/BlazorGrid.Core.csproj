@@ -1,9 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<Version>0.1.0</Version>
+		<PackageId>GridFlow</PackageId>
+		<Title>GridFlow</Title>
+		<Authors>Sadia Chowdhury</Authors>
+		<Copyright>Copyright 2025 Sadia Chowdhury</Copyright>
+		<Description>A reflection and attribute-driven data grid library for Blazor Server. Define columns once on your C# model — BlazorGrid handles the rest.</Description>
+		<PackageTags>blazor blazor-server datagrid table components dotnet</PackageTags>
+		<PackageProjectUrl>https://github.com/Sadia-Chowdhury/BlazorGrid</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Sadia-Chowdhury/BlazorGrid</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReleaseNotes>v0.1.0 - Initial release. Attribute-driven column resolution, column visibility toggle, sort state management.</PackageReleaseNotes>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	</PropertyGroup>
 
 </Project>

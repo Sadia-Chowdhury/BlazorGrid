@@ -1,6 +1,5 @@
 ﻿@using BlazorGrid.Core
-@typeparam T
-
+@typeparam T where T : class
 <div class="mb-2 d-flex flex-wrap gap-3">
     @foreach (var column in _columns)
     {
@@ -79,9 +78,11 @@
 
     private string GetValue(T item, string propertyName)
     {
+        if (item == null) return "";
+
         var value = typeof(T)
-            .GetProperty(propertyName)
-            ?.GetValue(item);
+                .GetProperty(propertyName)
+                ?.GetValue(item);
 
         return value?.ToString() ?? "";
     }
