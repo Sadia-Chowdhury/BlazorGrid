@@ -4,7 +4,7 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<Version>0.1.0</Version>
+		<Version>0.2.0</Version>
 		<PackageId>GridFlow</PackageId>
 		<Title>GridFlow</Title>
 		<Authors>Sadia Chowdhury</Authors>
@@ -15,7 +15,7 @@
 		<RepositoryUrl>https://github.com/Sadia-Chowdhury/BlazorGrid</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageReleaseNotes>v0.1.0 - Initial release. Attribute-driven column resolution, column visibility toggle, sort state management.</PackageReleaseNotes>
+		<PackageReleaseNotes>v0.2.0 - Added pagination support and CSV export with visible column awareness.</PackageReleaseNotes>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 	</PropertyGroup>
 
