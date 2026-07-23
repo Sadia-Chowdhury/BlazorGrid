@@ -1,0 +1,114 @@
+﻿@using BlazorGrid.Core
+@typeparam T where T : class
+<div class="mb-2 d-flex flex-wrap gap-3">
+    @foreach (var column in _columns)
+    {
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   checked="@column.IsVisible"
+                   @onchange="() => ToggleColumn(column)"
+                   id="col_@column.PropertyName" />
+            <label class="form-check-label" for="col_@column.PropertyName">
+                @column.DisplayName
+            </label>
+        </div>
+    }
+</div>
+@if (!string.IsNullOrEmpty(Title))
+{
+    <h5 class="mb-3">@Title</h5>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                @foreach (var column in _columns)
+                {
+                    if (column.IsVisible)
+                    {
+                        <th @onclick="() => HandleSort(column)"
+                            style="cursor:pointer; user-select:none;">
+                            @column.DisplayName
+                            @if (_sortState.ColumnName == column.PropertyName)
+                            {
+                                @(_sortState.Direction == SortDirection.Ascending ? " ▲" : " ▼")
+                            }
+                        </th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Items)
+            {
+                <tr>
+                    @foreach (var column in _columns)
+                    {
+                        if (column.IsVisible)
+                        {
+                            <td>@GetValue(item, column.PropertyName)</td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@code {
+    [Parameter]
+    public string Title { get; set; } = "";
+    [Parameter]
+    public EventCallback<SortState> OnSortChanged { get; set; }
+    private SortState _sortState = new();
+    [Parameter]
+    public List<T> Items { get; set; } = new();
+    private List<ColumnDefinition> _columns = new();
+
+    protected override void OnParametersSet()
+    {
+        if (Items != null && Items.Any())
+        {
+            var itemType = Items.First().GetType();
+            var resolver = new ColumnResolver();
+            _columns = resolver.ResolveByType(itemType);
+        }
+    }
+
+    private string GetValue(T item, string propertyName)
+    {
+        if (item == null) return "";
+
+        var value = typeof(T)
+                .GetProperty(propertyName)
+                ?.GetValue(item);
+
+        return value?.ToString() ?? "";
+    }
+    private void ToggleColumn(ColumnDefinition column)
+    {
+        column.IsVisible = !column.IsVisible;
+    }
+    private async Task HandleSort(ColumnDefinition column)
+    {
+        if (!column.IsSortable)
+            return;
+
+        if (_sortState.ColumnName == column.PropertyName)
+        {
+            // same column clicked — flip direction
+            _sortState.Direction = _sortState.Direction == SortDirection.Ascending
+                ? SortDirection.Descending
+                : SortDirection.Ascending;
+        }
+        else
+        {
+            // new column clicked — reset to ascending
+            _sortState.ColumnName = column.PropertyName;
+            _sortState.Direction = SortDirection.Ascending;
+        }
+
+        await OnSortChanged.InvokeAsync(_sortState);
+    }
+}

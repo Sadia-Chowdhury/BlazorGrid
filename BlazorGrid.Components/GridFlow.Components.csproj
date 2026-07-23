@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<PackageId>GridFlow.Components</PackageId>
+		<Title>GridFlow.Components</Title>
+		<Version>0.1.0</Version>
+		<Authors>Sadia Chowdhury</Authors>
+		<Copyright>Copyright 2025 Sadia Chowdhury</Copyright>
+		<Description>Razor components for BlazorGrid — a reflection and attribute-driven data grid library for Blazor Server.</Description>
+		<PackageTags>blazor blazor-server datagrid table components dotnet</PackageTags>
+		<PackageProjectUrl>https://github.com/Sadia-Chowdhury/BlazorGrid</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Sadia-Chowdhury/BlazorGrid</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReleaseNotes>v0.1.0 - Initial release. Attribute-driven column resolution, column visibility toggle, sort state management.</PackageReleaseNotes>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<SupportedPlatform Include="browser" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.28" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\BlazorGrid.Core\GridFlow.Core.csproj" />
+	</ItemGroup>
+
+</Project>

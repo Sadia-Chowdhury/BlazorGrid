@@ -24,6 +24,15 @@
 
     private void HandleSort(SortState sort)
     {
-        _sortInfo = $"Sorting by {sort.ColumnName} - {sort.Direction}";
+        employees = sort.Direction == SortDirection.Ascending
+            ? employees.OrderBy(e => GetPropertyValue(e, sort.ColumnName)).ToList()
+            : employees.OrderByDescending(e => GetPropertyValue(e, sort.ColumnName)).ToList();
+    }
+
+    private object GetPropertyValue(EmployeeViewModel item, string propertyName)
+    {
+        return typeof(EmployeeViewModel)
+            .GetProperty(propertyName)
+            ?.GetValue(item) ?? "";
     }
 }
