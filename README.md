@@ -67,4 +67,4 @@ private void HandleSort(SortState sort)
 - `GridFlow.Demo` — working Blazor Server demo app
 
 ## Status
-✅ v0.1.0 published on NuGet
+✅ v0.2.0 published on NuGet
