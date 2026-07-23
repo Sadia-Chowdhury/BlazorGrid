@@ -58,6 +58,7 @@ private void HandleSort(SortState sort)
 - ✅ Sort state management with direction indicator
 - ✅ Configurable table title
 - ✅ Bootstrap styled out of the box
+- ✅ Pagination with page state management
 
 ## Project Structure
 - `GridFlow.Core` — attributes, column definitions, resolver, sort state
