@@ -1,4 +1,6 @@
 ﻿@using BlazorGrid.Core
+@using Microsoft.JSInterop
+@inject IJSRuntime JS
 @typeparam T where T : class
 <div class="mb-2 d-flex flex-wrap gap-3">
     @foreach (var column in _columns)
@@ -19,7 +21,11 @@
 {
     <h5 class="mb-3">@Title</h5>
 }
-
+<div class="d-flex justify-content-end mb-2">
+    <button class="btn btn-sm btn-outline-secondary" @onclick="ExportToCsv">
+        ⬇ Export CSV
+    </button>
+</div>
 <div class="table-responsive">
     <table class="table table-striped table-hover table-bordered align-middle">
         <thead class="table-dark">
@@ -105,6 +111,8 @@
 
     [Parameter]
     public EventCallback<PaginationState> OnPageChanged { get; set; }
+    [Parameter]
+    public string ExportFileName { get; set; } = "export.csv";
     protected override void OnParametersSet()
     {
         if (Items != null && Items.Any())
@@ -155,5 +163,23 @@
         if (Pagination == null) return;
         Pagination.PageNumber = pageNumber;
         await OnPageChanged.InvokeAsync(Pagination);
+    }
+    private async Task ExportToCsv()
+    {
+        var visibleColumns = _columns.Where(c => c.IsVisible).ToList();
+
+        var sb = new System.Text.StringBuilder();
+
+        // Header row
+        sb.AppendLine(string.Join(",", visibleColumns.Select(c => $"\"{c.DisplayName}\"")));
+
+        // Data rows
+        foreach (var item in Items)
+        {
+            var values = visibleColumns.Select(c => $"\"{GetValue(item, c.PropertyName)}\"");
+            sb.AppendLine(string.Join(",", values));
+        }
+
+        await JS.InvokeVoidAsync("gridFlowExport", ExportFileName, sb.ToString());
     }
 }
