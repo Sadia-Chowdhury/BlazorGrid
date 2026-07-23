@@ -59,6 +59,7 @@ private void HandleSort(SortState sort)
 - ✅ Configurable table title
 - ✅ Bootstrap styled out of the box
 - ✅ Pagination with page state management
+- ✅ CSV export — respects visible columns only
 
 ## Project Structure
 - `GridFlow.Core` — attributes, column definitions, resolver, sort state
