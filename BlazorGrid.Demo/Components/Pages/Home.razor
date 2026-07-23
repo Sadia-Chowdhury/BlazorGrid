@@ -1,32 +1,64 @@
 ﻿@page "/"
 @rendermode InteractiveServer
 @using BlazorGrid.Demo.ViewModels
+@using BlazorGrid.Core
 
 <h1>BlazorGrid Demo</h1>
 
-<BlazorGrid.Components.BlazorGrid Items="@employees"
+<BlazorGrid.Components.BlazorGrid Items="@pagedEmployees"
                                   T="EmployeeViewModel"
                                   Title="Employee List"
-                                  OnSortChanged="HandleSort" />
-
-<p>Sort: @_sortInfo</p>
+                                  OnSortChanged="HandleSort"
+                                  Pagination="@_pagination"
+                                  OnPageChanged="HandlePageChanged" />
 
 @code {
-    private string _sortInfo = "No sort applied";
+    private PaginationState _pagination = new PaginationState
+    {
+        PageSize = 2,
+        PageNumber = 1,
+        TotalCount = 8
+    };
 
-    private List<EmployeeViewModel> employees = new()
+    private List<EmployeeViewModel> allEmployees = new()
     {
         new() { Name = "Sadia Chowdhury",  Department = "Technology", Email = "sadia@example.com",  InternalCode = "EMP001" },
         new() { Name = "Rahel Ahmed",      Department = "Finance",    Email = "rahel@example.com",  InternalCode = "EMP002" },
         new() { Name = "Fatema Begum",     Department = "HR",         Email = "fatema@example.com", InternalCode = "EMP003" },
         new() { Name = "Karim Hassan",     Department = "Technology", Email = "karim@example.com",  InternalCode = "EMP004" },
+        new() { Name = "Nadia Islam",      Department = "Finance",    Email = "nadia@example.com",  InternalCode = "EMP005" },
+        new() { Name = "Tanvir Hossain",   Department = "HR",         Email = "tanvir@example.com", InternalCode = "EMP006" },
+        new() { Name = "Rima Akter",       Department = "Technology", Email = "rima@example.com",   InternalCode = "EMP007" },
+        new() { Name = "Sabbir Rahman",    Department = "Finance",    Email = "sabbir@example.com", InternalCode = "EMP008" },
     };
+
+    private List<EmployeeViewModel> pagedEmployees = new();
+
+    protected override void OnInitialized()
+    {
+        LoadPage();
+    }
+
+    private void LoadPage()
+    {
+        pagedEmployees = allEmployees
+            .Skip((_pagination.PageNumber - 1) * _pagination.PageSize)
+            .Take(_pagination.PageSize)
+            .ToList();
+    }
+
+    private void HandlePageChanged(PaginationState pagination)
+    {
+        _pagination = pagination;
+        LoadPage();
+    }
 
     private void HandleSort(SortState sort)
     {
-        employees = sort.Direction == SortDirection.Ascending
-            ? employees.OrderBy(e => GetPropertyValue(e, sort.ColumnName)).ToList()
-            : employees.OrderByDescending(e => GetPropertyValue(e, sort.ColumnName)).ToList();
+        allEmployees = sort.Direction == SortDirection.Ascending
+            ? allEmployees.OrderBy(e => GetPropertyValue(e, sort.ColumnName)).ToList()
+            : allEmployees.OrderByDescending(e => GetPropertyValue(e, sort.ColumnName)).ToList();
+        LoadPage();
     }
 
     private object GetPropertyValue(EmployeeViewModel item, string propertyName)

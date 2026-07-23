@@ -55,6 +55,41 @@
             }
         </tbody>
     </table>
+    @if (Pagination != null)
+    {
+        <div class="d-flex justify-content-between align-items-center mt-2">
+            <small class="text-muted">
+                Showing page @Pagination.PageNumber of @Pagination.TotalPages
+                (@Pagination.TotalCount total records)
+            </small>
+            <nav>
+                <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item @(!Pagination.HasPreviousPage ? "disabled" : "")">
+                        <button class="page-link"
+                                @onclick="() => GoToPage(Pagination.PageNumber - 1)">
+                            &laquo;
+                        </button>
+                    </li>
+                    @for (int i = 1; i <= Pagination.TotalPages; i++)
+                    {
+                        var pageNum = i;
+                        <li class="page-item @(Pagination.PageNumber == pageNum ? "active" : "")">
+                            <button class="page-link"
+                                    @onclick="() => GoToPage(pageNum)">
+                                @pageNum
+                            </button>
+                        </li>
+                    }
+                    <li class="page-item @(!Pagination.HasNextPage ? "disabled" : "")">
+                        <button class="page-link"
+                                @onclick="() => GoToPage(Pagination.PageNumber + 1)">
+                            &raquo;
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    }
 </div>
 @code {
     [Parameter]
@@ -65,7 +100,11 @@
     [Parameter]
     public List<T> Items { get; set; } = new();
     private List<ColumnDefinition> _columns = new();
+    [Parameter]
+    public PaginationState? Pagination { get; set; }
 
+    [Parameter]
+    public EventCallback<PaginationState> OnPageChanged { get; set; }
     protected override void OnParametersSet()
     {
         if (Items != null && Items.Any())
@@ -110,5 +149,11 @@
         }
 
         await OnSortChanged.InvokeAsync(_sortState);
+    }
+    private async Task GoToPage(int pageNumber)
+    {
+        if (Pagination == null) return;
+        Pagination.PageNumber = pageNumber;
+        await OnPageChanged.InvokeAsync(Pagination);
     }
 }
